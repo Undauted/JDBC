@@ -27,7 +27,7 @@ public class AdresManager {
     public static final String DELETE_adres = "DELETE FROM adres WHERE id=?";
     public static final String GET_ALL = "SELECT id, miejscowosc , ulica ,nr FROM adres";
     public static final String DELETE_ALL = "DELETE FROM adres";
-    public static final String GET_ALL_IN_CLASS = "SELECT prawnik.id, imie, nazwisko, wiek FROM prawnik WHERE adres_id = ?";
+    public static final String GET_ALL_IN_ADRES = "SELECT prawnik.id, imie, nazwisko, wiek FROM prawnik WHERE adres_id = ?";
 
     private Connection connection;
 
@@ -121,14 +121,14 @@ public class AdresManager {
     public List<Adres> pobierzWszystkie() {
         try {
             ResultSet rs = connection.prepareStatement(GET_ALL).executeQuery();
-            List<Adres> klasy = new ArrayList<>();
+            List<Adres> adresy = new ArrayList<>();
             while (rs.next()) {
                 Adres adres = new Adres(rs.getString("miejscowosc"), rs.getString("ulica"), rs.getInt("nr"));
                 adres.setId(rs.getLong("id"));
                 adres.setUczniowie(pobierzWszystkichAdresy(adres));
-                klasy.add(adres);
+                adresy.add(adres);
             }
-            return klasy;
+            return adresy;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -137,7 +137,7 @@ public class AdresManager {
 
     public List<Prawnik> pobierzWszystkichAdresy(Adres adres) {
         try {
-            PreparedStatement ps = connection.prepareStatement(GET_ALL_IN_CLASS);
+            PreparedStatement ps = connection.prepareStatement(GET_ALL_IN_ADRES);
             ps.setLong(1, adres.getId());
             ResultSet rs = ps.executeQuery();
             List<Prawnik> prawnicy = new ArrayList<>();

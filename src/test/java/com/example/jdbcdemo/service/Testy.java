@@ -1,9 +1,5 @@
 package com.example.jdbcdemo.service;
 
-
-
-
-
 import static org.junit.Assert.*;
 
 
@@ -191,7 +187,7 @@ public class Testy {
 	{
 		
 		
-		prawnikManager.usunWszystkich();
+		
 		adresManager.usunWszystkich();
 		Adres adres = new Adres(MIEJSCOWOSC,ULICA,NUMER);
 		
@@ -224,7 +220,7 @@ public class Testy {
 	{
 		
 		
-		prawnikManager.usunWszystkich();
+		
 		adresManager.usunWszystkich();
 		Adres adres = new Adres(MIEJSCOWOSC,ULICA,NUMER);
 		
@@ -246,6 +242,8 @@ public class Testy {
 		Adres adr = adresy2.get(0);
 		
 		assertEquals(IMIE_2,adr.getUlica());
+		
+		
 		
 	}
 	
