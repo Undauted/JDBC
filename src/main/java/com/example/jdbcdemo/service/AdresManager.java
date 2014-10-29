@@ -31,6 +31,9 @@ public class AdresManager {
 
     private Connection connection;
 
+	@SuppressWarnings("unused")
+	private Statement statement;
+
     public AdresManager() {
         try {
             connection = DriverManager.getConnection(URL);
@@ -46,9 +49,9 @@ public class AdresManager {
 
     private Boolean checkIfTableExists() {
         try {
-            Statement statement = connection.createStatement();
-            ResultSet rs = connection.getMetaData().getTables(null, null, null,
-                    null);
+            statement = connection.createStatement();
+            ResultSet rs = 
+            		connection.getMetaData().getTables(null, null, null, null);
 
             while (rs.next()) {
                 if ("Adres".equalsIgnoreCase(rs.getString("TABLE_NAME"))) {
@@ -73,7 +76,8 @@ public class AdresManager {
            
                 stmt = ADD_adres;
             
-            PreparedStatement dodajAdresyStmt = connection.prepareStatement(stmt, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement dodajAdresyStmt = 
+            		connection.prepareStatement(stmt, Statement.RETURN_GENERATED_KEYS);
             dodajAdresyStmt.setInt(3, adres.getNr());
             dodajAdresyStmt.setString(2, adres.getUlica());
             dodajAdresyStmt.setString(1, adres.getMiejscowosc());
@@ -100,7 +104,8 @@ public class AdresManager {
     public int usun(Adres adres) throws Exception {
         int count = 0;
         try {
-            PreparedStatement usunStatement = connection.prepareStatement(DELETE_adres);
+            PreparedStatement usunStatement = 
+            		connection.prepareStatement(DELETE_adres);
             usunStatement.setLong(1, adres.getId());
            count =  usunStatement.executeUpdate();
         } catch (SQLException e) {
@@ -120,7 +125,8 @@ public class AdresManager {
 
     public List<Adres> pobierzWszystkie() {
         try {
-            ResultSet rs = connection.prepareStatement(GET_ALL).executeQuery();
+            ResultSet rs = 
+            		connection.prepareStatement(GET_ALL).executeQuery();
             List<Adres> adresy = new ArrayList<>();
             while (rs.next()) {
                 Adres adres = new Adres(rs.getString("miejscowosc"), rs.getString("ulica"), rs.getInt("nr"));
@@ -137,7 +143,8 @@ public class AdresManager {
 
     public List<Prawnik> pobierzWszystkichAdresy(Adres adres) {
         try {
-            PreparedStatement ps = connection.prepareStatement(GET_ALL_IN_ADRES);
+            PreparedStatement ps = 
+            		connection.prepareStatement(GET_ALL_IN_ADRES);
             ps.setLong(1, adres.getId());
             ResultSet rs = ps.executeQuery();
             List<Prawnik> prawnicy = new ArrayList<>();
@@ -158,7 +165,8 @@ public class AdresManager {
    	{
    		int count = 0;
    		try {
-   			PreparedStatement editPrawnikStmt = connection.prepareStatement(UPDATE_adres);
+   			PreparedStatement editPrawnikStmt = 
+   					connection.prepareStatement(UPDATE_adres);
    			editPrawnikStmt.setString(1, ulica);
    			editPrawnikStmt.setLong(2, adres.getId());
    			count = editPrawnikStmt.executeUpdate();

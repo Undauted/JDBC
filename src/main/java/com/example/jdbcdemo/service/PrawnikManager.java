@@ -22,7 +22,7 @@ public class PrawnikManager {
             "FOREIGN KEY (adres_id) REFERENCES adres(id) ON DELETE CASCADE )";
 
     public static final String ADD_prawnik = "INSERT INTO prawnik(imie, nazwisko, wiek, adres_id) VALUES(?, ?, ?, ?)";
-    public static final String UPDATE_prawnik = "UPDATE Prawnik set imie=? where id=? ";
+    public static final String UPDATE_prawnik = "UPDATE Prawnik set adres_id=? where id=? ";
     public static final String DELETE_prawnik = "DELETE FROM prawnik WHERE id=?";
     public static final String GET_ALL = "SELECT prawnik.id, imie, nazwisko, wiek, adres_id, miejscowosc ,ulica,nr " +
             "FROM prawnik JOIN adres ON adres_id = adres.id";
@@ -31,6 +31,9 @@ public class PrawnikManager {
     
 
     private Connection connection;
+
+	@SuppressWarnings("unused")
+	private Statement statement;
 
     public PrawnikManager() {
         try {
@@ -47,7 +50,7 @@ public class PrawnikManager {
 
     private Boolean checkIfTableExists() {
         try {
-            Statement statement = connection.createStatement();
+            statement = connection.createStatement();
             ResultSet rs = connection.getMetaData().getTables(null, null, null,
                     null);
 
@@ -75,7 +78,8 @@ public class PrawnikManager {
            
                 stmt = ADD_prawnik;
             
-            PreparedStatement dodajPrawnikow = connection.prepareStatement(stmt, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement dodajPrawnikow = 
+            		connection.prepareStatement(stmt, Statement.RETURN_GENERATED_KEYS);
             dodajPrawnikow.setString(1, prawnik.getImie());
             dodajPrawnikow.setString(2, prawnik.getNazwisko());
             dodajPrawnikow.setInt(3, prawnik.getWiek());
@@ -104,7 +108,8 @@ public class PrawnikManager {
     	int count = 0;
        
         try {
-            PreparedStatement usunStatement = connection.prepareStatement(DELETE_prawnik);
+            PreparedStatement usunStatement = 
+            		connection.prepareStatement(DELETE_prawnik);
             usunStatement.setLong(1, prawnik.getId());
             count = usunStatement.executeUpdate();
         } catch (SQLException e) {
@@ -123,7 +128,8 @@ public class PrawnikManager {
 
     public List<Prawnik> pobierzWszystkich() {
         try {
-            ResultSet rs = connection.prepareStatement(GET_ALL).executeQuery();
+            ResultSet rs = 
+            		connection.prepareStatement(GET_ALL).executeQuery();
             List<Prawnik> uczniowie = new ArrayList<Prawnik>();
             while (rs.next()) {
                 Prawnik prawnik = new Prawnik(rs.getString("imie"), rs.getString("nazwisko"), rs.getInt("wiek"));
@@ -140,12 +146,13 @@ public class PrawnikManager {
         }
     }
     
-    public int editPrawnik(String imie,Prawnik prawnik)
+    public int editPrawnik(Adres adres,Prawnik prawnik)
 	{
 		int count = 0;
 		try {
-			PreparedStatement editPrawnikStmt = connection.prepareStatement(UPDATE_prawnik);
-			editPrawnikStmt.setString(1, imie);
+			PreparedStatement editPrawnikStmt = 
+					connection.prepareStatement(UPDATE_prawnik);
+			editPrawnikStmt.setLong(1, adres.getId());
 			editPrawnikStmt.setLong(2, prawnik.getId());
 			count = editPrawnikStmt.executeUpdate();
 			

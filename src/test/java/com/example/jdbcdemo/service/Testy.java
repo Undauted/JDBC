@@ -26,6 +26,7 @@ public class Testy {
 	private final static int NUMER = 34;
 	private final static String ULICA = "Grunwaldzka";
 	private final static String MIEJSCOWOSC = "Gdańsk";
+	private final static String ULICA2 = "Kołobrzeska";
 	
 //---------------------------Sprawdzenie połączenia prawników---------------------------------------------------------	
 	@Test
@@ -75,6 +76,8 @@ public class Testy {
 		Prawnik pra = prawnicy.get(0);
 		
 		assertEquals(IMIE_1, pra.getImie());
+		assertEquals(NAZWISKO_1, pra.getNazwisko());
+		assertEquals(WIEK_1, pra.getWiek());
 		
 		
 		}
@@ -108,6 +111,15 @@ public class Testy {
 		assertEquals(NAZWISKO_1,pra.getNazwisko());
 		assertEquals(WIEK_1,pra.getWiek());
 		
+	}
+//---------------------------Pobranie selectem adresów---------------------------------------------------------	
+	@Test
+	public void sprawdzSelectWszystkiego()
+	{
+		List<Adres> adresy = adresManager.pobierzWszystkie();
+		Adres adr = adresy.get(0);
+			
+		assertNotNull(adr);
 	}
 //---------------------------Usuwanie wszystkich prawników---------------------------------------------------------	
 	@Test
@@ -206,12 +218,9 @@ public class Testy {
 		List<Prawnik> praw = prawnikManager.pobierzWszystkich();
 		Prawnik pra = praw.get(0);
 		
-		assertEquals(1, prawnikManager.editPrawnik(IMIE_2,pra));
+		assertEquals(1, prawnikManager.editPrawnik(adre,pra));
 		
-		List<Prawnik> prawn = prawnikManager.pobierzWszystkich();
-		Prawnik pr = prawn.get(0);
 		
-		assertEquals(IMIE_2,pr.getImie());
 		
 	}
 //---------------------------Edycja adresów---------------------------------------------------------
@@ -236,17 +245,13 @@ public class Testy {
 		
 		assertEquals(1,prawnikManager.zapisz(prawnik));
 		
-		assertEquals(1, adresManager.editPrawnik(IMIE_2,adre));
+		assertEquals(1, adresManager.editPrawnik(ULICA2,adre));
 		
 		List<Adres> adresy2 = adresManager.pobierzWszystkie();
 		Adres adr = adresy2.get(0);
 		
-		assertEquals(IMIE_2,adr.getUlica());
-		
-		
-		
-	}
-	
-	
+		assertEquals(ULICA2,adr.getUlica());
+		}
+
 
 }
